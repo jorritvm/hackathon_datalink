@@ -1,0 +1,26 @@
+[project]
+name = "hackathon_datalink"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Jorrit Vander Mynsbrugge",email = "44178217+jorritvm@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "shiny (>=1.2.1,<2.0.0)",
+    "pandas (>=2.2.3,<3.0.0)",
+    "faicons (>=0.2.2,<0.3.0)",
+    "plotly (>=6.0.0,<7.0.0)",
+    "ridgeplot (>=0.3.1,<0.4.0)",
+    "shinywidgets (>=0.5.1,<0.6.0)",
+    "shinyswatch (>=0.8.0,<0.9.0)"
+]
+
+[tool.poetry]
+packages = [{include = "hackathon", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
