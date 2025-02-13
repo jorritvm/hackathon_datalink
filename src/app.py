@@ -1,5 +1,10 @@
 from shiny import App, ui, render
 from shinyswatch import theme
+from random_data import get_data
+import pandas as pd
+
+# load fake data
+data = get_data()
 
 # UI
 def preview_data_content():
@@ -15,10 +20,10 @@ def preview_data_content():
             ),
             ui.input_action_button("reset_button", "Reset"),
             ui.input_action_button("apply_button", "Apply", class_="accent-button"),
-            col_widths = [3, 3, 3, 1, 1],
+            col_widths = [2, 2, 2, 2, 2],
         ),
 
-        ui.p("This is the content for the Preview Data tab."),
+        ui.output_data_frame("fake_data")
     )
 
 def export_content():
@@ -34,18 +39,17 @@ app_ui = ui.page_fluid(
     ui.panel_title(title="Search Data"),
     ui.h6("Home / Active Power Schedule / Delivery Point Schedule"),
     ui.card(
-        ui.card_body(ui.p("<<< Go back to Active power schedule")),
         ui.card_header("Delivery Point Schedule"),
         ui.layout_columns(
             ui.navset_tab(
                 ui.nav_panel("Preview data", preview_data_content()),
-                ui.nav_panel("Overview", "Panel B content"),
-                ui.nav_panel("Create Query", "Panel C content"),
+                ui.nav_panel("Overview", "Coming soon..."),
+                ui.nav_panel("Create Query", "Coming soon..."),
             ),
             ui.navset_tab(
                 ui.nav_panel("Export", export_content()),
-                ui.nav_panel("API", "api"),
-                ui.nav_panel("Python", "python"),
+                ui.nav_panel("API", "Coming soon..."),
+                ui.nav_panel("Python", "Coming soon..."),
             ),
             col_widths=[9, 3],
         ),
@@ -57,35 +61,10 @@ app_ui = ui.page_fluid(
 
 # SERVER
 def server(input, output, session):
-    pass
+    @render.data_frame
+    def fake_data():
+        df = pd.DataFrame(data)
+        return render.DataGrid(df)
 
-
-#     @output
-#     @render.plot(alt="Solar power barchart")
-#     def plot_year():
-#         df = get_generation_per_year()
-#         bars = plt.bar(df.time, df.solar)
-#         plt.bar_label(bars)
-#         plt.xlabel('Year')
-#         plt.ylabel('Generation (kWh)')
-#
-#     @output
-#     @render.plot(alt="Solar power barchart")
-#     def plot_month():
-#         df = get_generation_per_month(input.sl_month_year())
-#         bars = plt.bar(df.time, df.solar)
-#         plt.bar_label(bars)
-#         plt.xlabel('Month')
-#         plt.ylabel('Generation (kWh)')
-#
-#     @output
-#     @render.plot(alt="Solar power barchart")
-#     def plot_day():
-#         df = get_generation_per_day(input.sl_day_year(),
-#                                     input.sl_day_month())
-#         bars = plt.bar(df.time, df.solar)
-#         plt.bar_label(bars)
-#         plt.xlabel('Day')
-#         plt.ylabel('Generation (kWh)')
 
 app = App(app_ui, server, debug=True)

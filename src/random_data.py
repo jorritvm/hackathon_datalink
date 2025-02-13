@@ -800,3 +800,6 @@ data = [
         "deliverypoint": "54308538384936",
     },
 ]
+
+def get_data():
+    return data

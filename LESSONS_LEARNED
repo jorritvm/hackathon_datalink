@@ -16,3 +16,4 @@
 - easily themeable with https://bootswatch.com/ themes
     https://shiny.posit.co/py/docs/ui-customize.html#:~:text=Simply%20choose%20a%20theme%20from,(Shiny%20Core)%20or%20ui.
 
+- datagrid gives sorting options and line highlighting
