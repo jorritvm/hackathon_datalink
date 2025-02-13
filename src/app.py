@@ -1,4 +1,4 @@
-from shiny import App, ui, render
+from shiny import App, ui, render, reactive
 from shinyswatch import theme
 from random_data import get_data
 import pandas as pd
@@ -9,7 +9,7 @@ data = get_data()
 # UI
 def preview_data_content():
     return ui.div(
-        ui.h6("Select a start and end date to preview data"),
+        ui.markdown("**Select a start and end date to preview data**"),
         ui.layout_columns(
             ui.input_date("start_date", "Start Date", value="2024-11-17"),
             ui.input_date("end_date", "End Date", value="2024-11-20"),
@@ -23,7 +23,7 @@ def preview_data_content():
             col_widths = [2, 2, 2, 2, 2],
         ),
 
-        ui.output_data_frame("fake_data")
+        ui.output_data_frame("filtered_data")
     )
 
 def export_content():
@@ -61,10 +61,25 @@ app_ui = ui.page_fluid(
 
 # SERVER
 def server(input, output, session):
+
     @render.data_frame
-    def fake_data():
+    @reactive.event(input.apply_button)
+    def filtered_data():
+        start_date = pd.to_datetime(input.start_date()).tz_localize('UTC')
+        end_date = pd.to_datetime(input.end_date()).tz_localize('UTC')
         df = pd.DataFrame(data)
-        return render.DataGrid(df)
+        dff = df.copy()
+        dff['date_utc'] = pd.to_datetime(dff['date_utc'])
+        dff = dff[(dff['date_utc'] >= start_date) & (dff['date_utc'] <= end_date)]
+        return render.DataGrid(dff)
+
+
+
+    # @render.data_frame
+    # def fake_data():
+    #     df = pd.DataFrame(data)
+    #     return render.DataGrid(df)
 
 
 app = App(app_ui, server, debug=True)
+
